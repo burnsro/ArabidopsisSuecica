@@ -34,7 +34,7 @@ for record in vcf_reader.fetch(options.chr, int(options.st), int(options.end)):
 			#print (gen)
 		elif record.var_type=='snp' and len(list(set(gen)))==2:
 			Lal+1
-			if len(gen)<15:##allow for 50% missing data only
+			if len(gen)<15:##allow for no missing data only
 				pass
 			else:
 				#print (gen)
