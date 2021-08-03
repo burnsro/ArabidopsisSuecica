@@ -33,7 +33,7 @@ for line in open('As_SNPs2020.Asue_Aa.At2Aa.BiSNPS.vcf.ANN.forpolarizing.csv'):
 		out.write('coord\t%s\trev\tann\n'%('\t'.join(names)))
 		#print (names[:30], names[30:])
 		#break
-	elif mychr==chr:
+	elif mychr==chr and coord in all_coord:
 		gen=line.strip().split(',')[50:59]+line.strip().split(',')[46:48]+line.strip().split(',')[32:46]+line.strip().split(',')[98:99]
 		#gen=[x.split(":")[0] for x in gen]
 		genAA=line.strip().split(',')[50:59]+line.strip().split(',')[46:48]
