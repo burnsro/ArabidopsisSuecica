@@ -27,12 +27,10 @@ for line in open('%s/%s'%(options.dir, options.vcf)):
 		gen2=filter(lambda a: a != './././.', gen2)	
 		if len(set(gen))==1 and len(set(gen2))>1:	
 			gen=line.strip().split(',')[2:32]
-			#print(gen) 
-			#break
-			#gen=filter(lambda a: a != 'NA', gen)
+			gen2=line.strip().split(',')[32:48] + line.strip().split(',')[50:59] + line.strip().split(',')[98:99] 
 			gen_new=unique(list(gen))
 			line2=line.strip().split(',')
-			if gen.count("NA")<20:
+			if gen.count("NA")<5 and gen2.count("NA")<5:
 				out.write('%s\t%s\n'%('\t'.join(line2[0:2]), '\t'.join(gen_new)))
 			else:
 				pass
