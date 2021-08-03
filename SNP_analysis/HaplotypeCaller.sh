@@ -163,5 +163,73 @@ java -Xmx30g -Djava.io.tmpdir=$TMP -jar $EBROOTGATK/GenomeAnalysisTK.jar \
 #   --disable_auto_index_creation_and_locking_when_reading_rods \
 #   -nt 16
 
+#Get subgenomes from VCF file
+#vcf='As_SNPs2020.Asue_scaffoldAll.nonVars.BiSNPS.vcf'
+#awk -F '\t' '$1~"#" || $1=="Asue_scaffold1" || $1=="Asue_scaffold2" || $1=="Asue_scaffold3" || $1=="Asue_scaffold4" || $1=="Asue_scaffold5" {print $0}' $raw/${vcf} > $out/${vcf}_Ath
+
+#awk -F '\t' '$1~"#" || $1=="Asue_scaffold6" || $1=="Asue_scaffold7" || $1=="Asue_scaffold8" || $1=="Asue_scaffold9" || $1=="Asue_scaffold10" || $1=="Asue_scaffold11" || $1=="Asue_scaffold12" || $1=="Asue_scaffold13" {print $0}' ${raw}/${vcf} > ${out}/${vcf}_Aar
+
+#downsample columns to remove A. thaliana acc in the A. arenosa subgenome VCF and A. arenosa acc in the A. thaliana VCF
+#because everything was mapped altogether to reduce bias in mapping
+#downsample Alyrata to just european A. lyrata petreae
+#cd $out
+#python selectcol_AA.py
+#python selectcol_AT.py
+#python selectcol_AL.py
 
 
+#to polarize map Athaliana to A. arenosa subgenome only and call SNPs
+#map European Alyrata.lyratapetreae (more individuals than A.arenosa) to A. thaliana and call SNPs
+
+#Combine vcfs with Al2At and At2AA
+
+
+#refdir='/groups/nordborg/projects/suecica/001Assembly/004Asuecica/release'
+#java -Xmx80g -Djava.io.tmpdir=/scratch-cbe/users/robin.burns/tmp -jar $EBROOTGATK/GenomeAnalysisTK.jar \
+#                      -R ${refdir}/Asue_genome_210620.full.Popte2.AA.fasta \
+#                      -T CombineVariants \
+#                      --variant $out/As_SNPs2020.Asue_scaffoldAll.nonVars.BiSNPS.DS.vcf_Aar \
+#                      --variant ${out}/At_SNPS2020.AsAA.Asue_scaffoldAA.combined.NonVarBiSNPs.vcf \
+#                      -o $out/As_SNPs2020.AsAA.forpolarizing.nonVars.BiSNPs.vcf \
+#                      -nt 16 \
+
+
+
+#java -Xmx80g -Djava.io.tmpdir=/scratch-cbe/users/robin.burns/tmp -jar $EBROOTGATK/GenomeAnalysisTK.jar \
+#                       -R ${refdir}/Asue_genome_210620.full.Popte2.AT.fasta \
+#                      -T CombineVariants \
+#                      --variant $out/As_SNPs2020.Asue_scaffoldAll.nonVars.BiSNPS.DS.vcf_Ath\
+#                      --variant ${out}/Al_SNPS2020.AsAT.Asue_scaffoldAT.combined.NonVarBiSNPs.DS.vcf\
+#                      -o $out/As_SNPs2020.AsAT.forpolarizing.nonVars.BiSNPs.vcf\
+#                      -nt 16 \
+
+#vcfAA=As_SNPs2020.AsAA.forpolarizing.nonVars.BiSNPs.vcf
+#python filtCombVCF.py -v ${vcfAA} -d ${out} #remove missing sites 
+
+
+#Run SNPeff
+
+#Now make csv
+#vcfAA=As_SNPs2020.AsAA.forpolarizing.nonVars.BiSNPs.vcf.filt.ANN
+#python vcf2csv_AA_ann.py -v ${vcfAA} -d ${out}
+
+#vcfAT=As_SNPs2020.AsAT.forpolarizing.nonVars.BiSNPs.vcf.filt.ANN
+#python vcf2csv_AT_ann.py -v ${vcfAT} -d ${out}
+
+#vcfAT=As_SNPs2020.AsAT.forpolarizing.nonVars.BiSNPs.vcf.filt.ANN.csv
+#python get_fixed_SNPs_positionsAthsubgenome.py -v ${vcfAT} -d ${out}
+
+#vcfAA=As_SNPs2020.AsAA.forpolarizing.nonVars.BiSNPs.vcf.filt.ANN.csv
+#python get_fixed_SNPs_positionsAarsubgenome.py -v ${vcfAA} -d ${out}
+
+#Now polarize 
+#per chromosome
+samples=$out'/chromosomes.txt'
+export l=$SLURM_ARRAY_TASK_ID\p
+line=`sed -n $l $samples`
+chrom=`echo $line | cut -d ' ' -f1`
+echo $chrom
+
+
+python polarize.py
+python polarizeAA.py
