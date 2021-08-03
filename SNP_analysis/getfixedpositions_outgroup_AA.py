@@ -7,7 +7,7 @@ parser.add_option("-v", "--vcf", dest="vcf", help="combined vcf file", default="
 parser.add_option("-d", "--dir", dest="dir", help="directory of combined vcf file", default="")
 (options, args) = parser.parse_args()
 
-out=open('%s/%s.NA50perATfixed'%(options.dir, options.vcf), 'w')
+out=open('%s/%s.ATfixed'%(options.dir, options.vcf), 'w')
 for line in open('%s/%s'%(options.dir, options.vcf)):
 	if 'chr' in line:
 		#line=line.strip().split(',')
@@ -30,7 +30,7 @@ for line in open('%s/%s'%(options.dir, options.vcf)):
 			gen2=line.strip().split(',')[32:48] + line.strip().split(',')[50:59] + line.strip().split(',')[98:99] 
 			gen_new=unique(list(gen))
 			line2=line.strip().split(',')
-			if gen.count("NA")<5 and gen2.count("NA")<5:
+			if gen.count("NA")==0 and gen2.count("NA")==0 and len(set(gen))==1 and len(set(gen2))>1:
 				out.write('%s\t%s\n'%('\t'.join(line2[0:2]), '\t'.join(gen_new)))
 			else:
 				pass
