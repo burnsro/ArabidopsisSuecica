@@ -231,5 +231,5 @@ chrom=`echo $line | cut -d ' ' -f1`
 echo $chrom
 
 
-python polarize.py
-python polarizeAA.py
+python polarize.py -c ${chrom}
+python polarizeAA.py -c ${chrom}
