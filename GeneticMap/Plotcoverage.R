@@ -1,4 +1,9 @@
 #coverage plot
+#To run first map reads to a masked genome for "smoother" coverage
+#get depth file from samtools: samtools depth $out/$acc.filt.bam > $out/$acc.filt.depth
+#R --vanilla --slave --no-save --no-restore --args $out/${acc}.filt.depth $out/${acc}.coverage.pdf < /groups/nordborg/projects/suecica/005scripts/PlotCoverage.R
+
+
 library(reshape2)
 library(data.table)
 library(zoo)
@@ -27,12 +32,6 @@ depth.average.plot <- ggplot(depth.average, aes(x=window.end, y=coverage, colour
     theme(panel.spacing.x = grid::unit(0, "cm")) 
 }
 
-
-#  mypdf=paste(file, ".pdf", sep='')
-#  pdf(mypdf, width=13, height=6)
-#  X.p5
-#  dev.off()
-
 setwd("/scratch-cbe/users/robin.burns/021MapAs_2020/coverage_plots/genome")
 args <- commandArgs(TRUE)
 plotcoverage(file=args[1]) 
@@ -40,4 +39,7 @@ mypdf=args[2]
 pdf(mypdf, width=10.8, height=4)
 X.p5
 dev.off()
+
+
+
 
