@@ -1,5 +1,5 @@
-out=open('ATside_forpi.csv', 'w')
-for line in open('As_SNPs2020.Asue_At.Al2At.nonVars.BiSNPS.vcf'):
+out=open('MyCSV.csv', 'w')
+for line in open('MyVCF.vcf'):
 	if '##' in line:
 		pass
 	elif '#CHR' in line:
