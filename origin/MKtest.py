@@ -14,14 +14,6 @@ def parse_arguments():
 
 def is_fixed(genotypes):
     """Check if all genotypes are the same (fixed) and return the fixed genotype, excluding missing genotypes.
-    
-    Args:
-        genotypes (list of int): List of genotype integers from cyvcf2 (0, 1, 2 for homozygous reference, heterozygous,
-                                 homozygous alternate, respectively, and 3 for missing data).
-    
-    Returns:
-        tuple: (bool, int or None) A tuple where the first element is a boolean indicating whether the genotypes are fixed,
-               and the second element is the fixed genotype (0, 1, or 2) if fixed, or None otherwise.
     """
     # Exclude missing genotypes, correctly represented by 3 in cyvcf2
     non_missing_genotypes = [gt for gt in genotypes if gt != 3]
@@ -45,11 +37,9 @@ def main():
     Pn, Ps, Dn, Ds = 0, 0, 0, 0
 
     for record in vcf_reader(f"{args.chromosome}:{args.start}-{args.end}"):
-        # cyvcf2 provides genotype information directly through gt_types
-        # Correctly access genotype information for all samples
-        genotypes = record.gt_types  # This is an array of integers representing genotypes for all samples
+        genotypes = record.gt_types 
 
-        # Assuming the last 16 samples are A. suecica and the rest are A. arenosa
+        # The last 16 samples are A. suecica and the rest are the parents accessions
         arenosa_genotypes = genotypes[:-16]
         asuecica_genotypes = genotypes[-16:]
         #print(arenosa_genotypes)
@@ -87,7 +77,7 @@ def main():
         writer.writerow(['Gene', 'Pn', 'Ps', 'Dn', 'Ds', 'Pn/Ps', 'Dn/Ds'])
         writer.writerow([args.name, Pn, Ps, Dn, Ds, pn_ps_ratio, dn_ds_ratio])
 
-    print(f"MK results saved to {output_file}")
+    ##print(f"MK results saved to {output_file}")
 
 if __name__ == '__main__':
     main()
