@@ -28,7 +28,7 @@ for line in open('%s/%s'%(options.dir,options.csv),'r'):
 		count=0
 		num_05 = sum(1 for g in genAS if g != 'NA' and float(g) == 0.5)
 		num_05AT = sum(1 for g in genANC if g != 'NA' and float(g) == 0.5)
-		if num_05 > 5 and num_05AT >= 0.05 * len(genANC):
+		if num_05 > 5 or num_05AT >= 0.05 * len(genANC):
 			continue
 		for i,j in list(itertools.product(accAt, accAs)):
 			ind_i, ind_j=accAt.index(i),accAs.index(j)
